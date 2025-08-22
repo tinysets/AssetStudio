@@ -28,6 +28,13 @@ namespace AssetStudio
         public List<SerializedType> m_RefTypes;
         public string userInformation;
 
+        struct RefAsset
+        {
+            public int ref_pathId;
+            public int value1;
+            public int value2;
+            public int classID;
+        }
         public SerializedFile(FileReader reader, AssetsManager assetsManager)
         {
             this.assetsManager = assetsManager;
@@ -110,6 +117,16 @@ namespace AssetStudio
                 m_EnableTypeTree = reader.ReadBoolean();
             }
 
+            if (CODM.IsCODM)
+            {
+                var strcount = reader.ReadInt32();
+                for (var i = 0; i < strcount; i++)
+                {
+                    var str = reader.ReadStringToNull();
+                    Console.WriteLine(string.Format("{0}:{1}", i,str));
+                }
+            }
+            
             // Read Types
             int typeCount = reader.ReadInt32();
             m_Types = new List<SerializedType>(typeCount);
@@ -128,9 +145,12 @@ namespace AssetStudio
             m_Objects = new List<ObjectInfo>(objectCount);
             Objects = new List<Object>(objectCount);
             ObjectsDic = new Dictionary<long, Object>(objectCount);
+           
+            var ignoreList = new List<RefAsset>();
             for (int i = 0; i < objectCount; i++)
             {
                 var objectInfo = new ObjectInfo();
+                var isCodmRef = false;
                 if (bigIDEnabled != 0)
                 {
                     objectInfo.m_PathID = reader.ReadInt64();
@@ -143,6 +163,34 @@ namespace AssetStudio
                 {
                     reader.AlignStream();
                     objectInfo.m_PathID = reader.ReadInt64();
+                    if (CODM.IsCODM)
+                    {
+                        var flag = reader.ReadInt32();
+                        if (flag != 0)
+                        {
+                            isCodmRef = true;
+                        }
+                    }
+                }
+
+                if (isCodmRef)
+                {
+                    var ref_pathID = reader.ReadInt32();
+                    var unknow1 = reader.ReadInt32();
+                    var unknow2 = reader.ReadInt32();
+                    var typeID = reader.ReadInt32();
+
+                    objectInfo.typeID = typeID;
+                    var type = m_Types[objectInfo.typeID];
+                    objectInfo.serializedType = type;
+                    objectInfo.classID = type.classID;
+                    ignoreList.Add(new RefAsset {
+                        ref_pathId = ref_pathID,
+                        value1 = unknow1,
+                        value2 = unknow2,
+                        classID = type.classID,
+                    });
+                    continue;
                 }
 
                 if (header.m_Version >= SerializedFileFormatVersion.LargeFilesSupport)
@@ -160,6 +208,11 @@ namespace AssetStudio
                 }
                 else
                 {
+                    if (objectInfo.typeID  >= m_Types.Count)
+                    {
+                        int a = 0;
+                        continue;
+                    }
                     var type = m_Types[objectInfo.typeID];
                     objectInfo.serializedType = type;
                     objectInfo.classID = type.classID;
@@ -180,6 +233,8 @@ namespace AssetStudio
                 }
                 m_Objects.Add(objectInfo);
             }
+
+            ignoreList.Sort((a,b)=>a.ref_pathId- b.ref_pathId );
 
             if (header.m_Version >= SerializedFileFormatVersion.HasScriptTypeIndex)
             {

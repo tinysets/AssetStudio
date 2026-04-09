@@ -65,6 +65,8 @@
             this.exportAllAssetsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportSelectedAssetsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportFilteredAssetsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.specifyAssemblyFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.assemblyFolderToolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.exportAnimatorWithSelectedAnimationClipToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
@@ -496,6 +498,8 @@
             // exportToolStripMenuItem
             // 
             this.exportToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.specifyAssemblyFolderToolStripMenuItem,
+            this.assemblyFolderToolStripSeparator,
             this.exportAllAssetsMenuItem,
             this.exportSelectedAssetsMenuItem,
             this.exportFilteredAssetsMenuItem,
@@ -532,6 +536,18 @@
             this.exportFilteredAssetsMenuItem.Size = new System.Drawing.Size(266, 22);
             this.exportFilteredAssetsMenuItem.Text = "Filtered assets";
             this.exportFilteredAssetsMenuItem.Click += new System.EventHandler(this.exportFilteredAssetsMenuItem_Click);
+            // 
+            // specifyAssemblyFolderToolStripMenuItem
+            // 
+            this.specifyAssemblyFolderToolStripMenuItem.Name = "specifyAssemblyFolderToolStripMenuItem";
+            this.specifyAssemblyFolderToolStripMenuItem.Size = new System.Drawing.Size(266, 22);
+            this.specifyAssemblyFolderToolStripMenuItem.Text = "Specify assembly folder...";
+            this.specifyAssemblyFolderToolStripMenuItem.Click += new System.EventHandler(this.specifyAssemblyFolderToolStripMenuItem_Click);
+            // 
+            // assemblyFolderToolStripSeparator
+            // 
+            this.assemblyFolderToolStripSeparator.Name = "assemblyFolderToolStripSeparator";
+            this.assemblyFolderToolStripSeparator.Size = new System.Drawing.Size(263, 6);
             // 
             // toolStripSeparator3
             // 
@@ -1680,6 +1696,8 @@
         private System.Windows.Forms.ColumnHeader columnHeaderSize;
         private System.Windows.Forms.ColumnHeader columnHeaderType;
         private System.Windows.Forms.ToolStripMenuItem exportToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem specifyAssemblyFolderToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator assemblyFolderToolStripSeparator;
         private System.Windows.Forms.ToolStripMenuItem exportAllAssetsMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exportSelectedAssetsMenuItem;
         private System.Windows.Forms.PictureBox previewPanel;

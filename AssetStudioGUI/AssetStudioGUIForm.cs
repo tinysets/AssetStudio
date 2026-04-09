@@ -1825,6 +1825,18 @@ namespace AssetStudioGUI
             }
         }
 
+        private void specifyAssemblyFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var openFolderDialog = new OpenFolderDialog { Title = "Select Assembly Folder" };
+            if (openFolderDialog.ShowDialog(this) != DialogResult.OK)
+                return;
+
+            Studio.assemblyLoader.Clear();
+            Studio.assemblyLoader.Load(openFolderDialog.Folder);
+            Logger.Info($"Managed assemblies loaded from: {openFolderDialog.Folder}");
+            StatusStripUpdate($"Assembly folder: {openFolderDialog.Folder}");
+        }
+
         private void exportAllAssetsMenuItem_Click(object sender, EventArgs e)
         {
             ExportAssets(ExportFilter.All, ExportType.Convert);
